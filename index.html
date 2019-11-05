@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Set List</title>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous">
+</script>
+<script language="javascript">
+        var setList =
+            [
+                {
+                    "title" : "Sisyphus",
+                    "artists" : ["Andrew Bird"],
+                    "genres" : ["Alternative", "Indie"],
+                    "year" : 2019
+                },
+                {
+                    "title" : "Pulaski at Night",
+                    "artists" : ["Andrew Bird"],
+                    "genres" : ["Alternative", "Indie"],
+                    "year" : 2016
+                },
+                {
+                    "title" : "Come Together",
+                    "artists" : ["The Beatles"],
+                    "genres" : ["Rock"],
+                    "year" : 1969
+                },
+                {
+                    "title" : "Dark Necessities",
+                    "artists" : ["Red Hot Chili Peppers"],
+                    "genres" : ["Rock"],
+                    "year" : 2016
+                },
+                {
+                    "title" : "Do I Wanna Know?",
+                    "artists" : ["Arctic Monkeys"],
+                    "genres" : ["Rock"],
+                    "year" : 2013
+                },
+                {
+                    "title" : "You Know I'm Not Good",
+                    "artists" : ["Amy Winehouse"],
+                    "genres" : ["Soul"],
+                    "year" : 2006
+                },
+                {
+                    "title" : "Valerie",
+                    "artists" : ["Amy Winehouse"],
+                    "genres" : ["Soul"],
+                    "year" : 2006
+                },
+                {
+                    "title" : "There She Goes",
+                    "artists" : ["The La's"],
+                    "genres" : ["Rock"],
+                    "year" : 1990
+                },
+                {
+                    "title" : "Times Are Hard for Dreamers",
+                    "artists" : ["Original Cast of Amelie", 
+                                 "Daniel Messe",
+                                 "Nathan Tysen"],
+                    "genres" : ["Musical Theater"],
+                    "year" : 2017
+                },
+                {
+                    "title" : "The Longest Time",
+                    "artists" : ["Billy Joel"],
+                    "genres" : ["Pop"],
+                    "year" : 1983
+                }
+            ];
+
+        /* Print Serialized Data */
+        document.write(JSON.stringify(setList));
+        document.write("<br><br>");
+
+        /* Print All Songs - Using JSON object for practice */
+        for (s in setList) {
+            document.write("<div class='song'>");
+
+            /* Print Title */
+            document.write("<div class='title'>" + setList[s].title + "</div>");
+
+            /* Print Artists */
+            var i = 0;
+            for (a in setList[s].artists) {
+                document.write(setList[s].artists[a]);
+
+                if (i !== setList[s].artists.length-1)
+                    document.write(", ");
+
+                i++;
+            }
+            document.write("<br>");
+
+            /* Print Genres */
+            i = 0;
+            for (g in setList[s].genres) {
+                document.write(setList[s].genres[g]);
+
+                if (i !== setList[s].genres.length-1)
+                    document.write(", ");
+
+                i++;
+            }
+            document.write("<br>");
+
+            /* Print Year */
+            document.write(setList[s].year);
+            document.write("<br>");
+
+            document.write("</div>");
+        }
+
+        /* Get list of genres */
+        var set = JSON.parse(JSON.stringify(setList));
+        var genresList = new Array();
+        for (i = 0; i < set.length; i++) {
+            for (j = 0; j < set[i].genres.length; j++) {
+                var currGenre = set[i].genres[j];
+
+                if (!genresList.includes(currGenre)) {
+                    genresList.push(currGenre);
+                }
+            }
+        }
+</script>
+<style type="text/css">
+    /* If this is changed - must also change in javascript */
+    div.song {
+        background-color: rgb(143,193,227, 0.4);
+        margin: 10px 0px;
+        display: block;
+        color: #15244C;
+        font-family: "Georgia";
+    }
+    div.title {
+        color: #000000;
+        font-weight: bold;
+    }
+    form {
+        background-color: rgb(143,193,227, 0.4);  
+        color: #000000;
+        font-weight: bold;
+        font-family: "Georgia";
+    }
+</style>
+</head>
+
+<body>
+
+    <form>
+        <div>~ Filter By A Genre ~</div>
+        <select id="selectBox"> </select>
+        <button id="subBtn" type="button">Submit</button>
+    </form>
+
+    <script language="javascript">
+        /* Add options to selection box */
+        var selBox = document.getElementById("selectBox");
+        for (i = 0; i < genresList.length; i++) {
+            var option = document.createElement("option");
+            option.text = genresList[i];
+            selBox.add(option);
+        }
+
+        $("#subBtn").click(function() {
+            var selectedGenre = 
+                $("#selectBox").children("option:selected").text();
+            displayMatches(set, selectedGenre);
+        });
+
+        function displayMatches(set, genre) {
+            for (i = 0; i < set.length; i++) {
+                if (hasGenre(set[i], genre)) {
+                    printSong(set[i]);
+                }
+            }
+        }
+
+        function hasGenre(song, genre) {
+            for (j = 0; j < song.genres.length; j++) {
+                if (song.genres[j] == genre)
+                    return true;
+            }
+            return false;
+        }
+
+        function printSong(song) {
+            document.write("<div class='song' style='background-color: rgb(143,193,227, 0.4);margin: 10px 0px;display: block;color: #15244C;font-family: 'Georgia';'>");
+
+            /* Print Title */
+            document.write("<div class='title' style='color: #000000;font-weight: bold;'>" + song.title + "</div>");
+
+            /* Print Artists */
+            for (a = 0; a < song.artists.length; a++) {
+                document.write(song.artists[a]);
+
+                if (a !== song.artists.length-1)
+                    document.write(", ");
+            }
+            document.write("<br>");
+
+            /* Print Genres */
+            for (a = 0; a < song.genres.length; a++) {
+                document.write(song.genres[a]);
+
+                if (a !== song.genres.length-1)
+                    document.write(", ");
+            }
+            document.write("<br>");
+
+            /* Print Year */
+            document.write(song.year);
+            document.write("<br>");
+
+            document.write("</div>");
+        }
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
